@@ -1,4 +1,4 @@
-package com.example.flutter_iot_ben
+package com.osygenlab.house_matters
 
 import io.flutter.embedding.android.FlutterActivity
 

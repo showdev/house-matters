@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_iot_ben/pages/control_view/widgets/slider/custom_arc.dart';
-import 'package:flutter_iot_ben/utils/slider_utils.dart';
+import 'package:house_matters/pages/control_view/widgets/slider/custom_arc.dart';
+import 'package:house_matters/utils/slider_utils.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 class SliderWidget extends StatelessWidget {
@@ -33,9 +33,7 @@ class SliderWidget extends StatelessWidget {
           ),
           Center(
             child: CustomArc(
-                color:color,
-                diameter: kDiameter,
-                sweepAngle: progressVal),
+                color: color, diameter: kDiameter, sweepAngle: progressVal),
           ),
           Center(
             child: Container(
@@ -94,10 +92,10 @@ class SliderWidget extends StatelessWidget {
                               color: Colors.black,
                               fontWeight: FontWeight.w500),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10),
                           child: Row(
-                            children: const [
+                            children: [
                               Text(
                                 "o",
                                 style: TextStyle(

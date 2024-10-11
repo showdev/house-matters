@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iot_ben/widgets/transparent_card.dart';
+import 'package:house_matters/widgets/transparent_card.dart';
 
 class PowerWidget extends StatelessWidget {
   final bool isActive;
@@ -31,7 +31,7 @@ class PowerWidget extends StatelessWidget {
                 text: TextSpan(
                     text: 'OFF',
                     style: TextStyle(
-                      fontFamily: "Poppins",
+                        fontFamily: "Poppins",
                         fontSize: 14,
                         color: !isActive
                             ? Colors.white

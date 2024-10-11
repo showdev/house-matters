@@ -1,23 +1,21 @@
 import 'package:animated_background/animated_background.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iot_ben/pages/control_view/widgets/option_widget.dart';
-import 'package:flutter_iot_ben/pages/control_view/options_enum.dart';
-import 'package:flutter_iot_ben/pages/control_view/widgets/power_widget.dart';
-import 'package:flutter_iot_ben/pages/control_view/widgets/slider/slider_widget.dart';
-import 'package:flutter_iot_ben/pages/control_view/widgets/speed_widget.dart';
-import 'package:flutter_iot_ben/pages/control_view/widgets/temp_widget.dart';
-import 'package:flutter_iot_ben/utils/slider_utils.dart';
-import 'package:flutter_iot_ben/widgets/custom_appbar.dart';
+import 'package:house_matters/pages/control_view/widgets/option_widget.dart';
+import 'package:house_matters/pages/control_view/options_enum.dart';
+import 'package:house_matters/pages/control_view/widgets/power_widget.dart';
+import 'package:house_matters/pages/control_view/widgets/slider/slider_widget.dart';
+import 'package:house_matters/pages/control_view/widgets/speed_widget.dart';
+import 'package:house_matters/pages/control_view/widgets/temp_widget.dart';
+import 'package:house_matters/utils/slider_utils.dart';
+import 'package:house_matters/widgets/custom_appbar.dart';
 import 'package:rainbow_color/rainbow_color.dart';
 
 class ControlPanelPage extends StatefulWidget {
   final String tag;
   final Color color;
 
-  const ControlPanelPage({
-    Key? key,
-    required this.tag,
-    required this.color}) : super(key: key);
+  const ControlPanelPage({Key? key, required this.tag, required this.color})
+      : super(key: key);
   @override
   _ControlPanelPageState createState() => _ControlPanelPageState();
 }
@@ -44,66 +42,60 @@ class _ControlPanelPageState extends State<ControlPanelPage>
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-          body: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: <Color>[
-                    Colors.white,
-                    activeColor[progressVal].withOpacity(0.5),
-                    activeColor[progressVal]
-                  ]),
-            ),
-            child: AnimatedBackground(
-              behaviour: RandomParticleBehaviour(
-                  options: ParticleOptions(
-                baseColor: const Color(0xFFFFFFFF),
-                opacityChangeRate: 0.25,
-                minOpacity: 0.1,
-                maxOpacity: 0.3,
-                spawnMinSpeed: speed * 60.0,
-                spawnMaxSpeed: speed * 120,
-                spawnMinRadius: 2.0,
-                spawnMaxRadius: 5.0,
-                particleCount: isActive ? speed * 150 : 0,
-              )),
-              vsync: this,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                  child: Column(
-                    children: [
-                     CustomAppBar(title: widget.tag),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            options(),
-                            slider(),
-                            controls(),
-                          ],
-                        ),
-                      )
-                    ],
+    return Scaffold(
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[
+                Colors.white,
+                activeColor[progressVal].withOpacity(0.5),
+                activeColor[progressVal]
+              ]),
+        ),
+        child: AnimatedBackground(
+          behaviour: RandomParticleBehaviour(
+              options: ParticleOptions(
+            baseColor: const Color(0xFFFFFFFF),
+            opacityChangeRate: 0.25,
+            minOpacity: 0.1,
+            maxOpacity: 0.3,
+            spawnMinSpeed: speed * 60.0,
+            spawnMaxSpeed: speed * 120,
+            spawnMinRadius: 2.0,
+            spawnMaxRadius: 5.0,
+            particleCount: isActive ? speed * 150 : 0,
+          )),
+          vsync: this,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+              child: Column(
+                children: [
+                  CustomAppBar(title: widget.tag),
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        options(),
+                        slider(),
+                        controls(),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
           ),
-        
+        ),
+      ),
     );
   }
 

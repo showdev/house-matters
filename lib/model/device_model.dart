@@ -1,10 +1,14 @@
 class DeviceModel {
-  String name= "";
-  String color= "";
+  String name = "";
+  String color = "";
   bool isActive = false;
   String icon = "";
 
-  DeviceModel({required this.name,required this.color,required this.isActive,required this.icon});
+  DeviceModel(
+      {required this.name,
+      required this.color,
+      required this.isActive,
+      required this.icon});
 
   DeviceModel.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -14,7 +18,7 @@ class DeviceModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
     data['color'] = color;
     data['isActive'] = isActive;

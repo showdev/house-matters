@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iot_ben/pages/control_view/control_panel_page.dart';
+import 'package:house_matters/pages/control_view/control_panel_page.dart';
 import 'package:flutter_svg/svg.dart';
 
 class Devices extends StatelessWidget {
@@ -32,8 +32,7 @@ class Devices extends StatelessWidget {
         closedShape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
         openBuilder: (BuildContext context, VoidCallback _) {
-          return ControlPanelPage(
-              tag: name, color: color);
+          return ControlPanelPage(tag: name, color: color);
         },
         tappable: true,
         closedBuilder: (BuildContext _, VoidCallback openContainer) {

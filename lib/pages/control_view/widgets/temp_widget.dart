@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_iot_ben/widgets/transparent_card.dart';
+import 'package:house_matters/widgets/transparent_card.dart';
 
 class TempWidget extends StatelessWidget {
   final double temp;

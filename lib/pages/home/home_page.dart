@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_iot_ben/pages/home/widgets/devices.dart';
-import 'package:flutter_iot_ben/repository/devices.dart';
-import 'package:flutter_iot_ben/utils/string_to_color.dart';
+import 'package:house_matters/pages/home/widgets/devices.dart';
+import 'package:house_matters/repository/devices.dart';
+import 'package:house_matters/utils/string_to_color.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -28,12 +28,12 @@ class _HomePageState extends State<HomePage> {
           child: SafeArea(
             child: Column(
               children: [
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
-                      "Hi,Ben",
+                      "Hi, Oleksii",
                       style: TextStyle(
                           fontSize: 28,
                           color: Colors.black,
@@ -69,9 +69,9 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(
+                              const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
+                                children: [
                                   Text(
                                     "4 devices added",
                                     style: TextStyle(

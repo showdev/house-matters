@@ -1,13 +1,12 @@
-name: flutter_iot_ben
+name: house_matters
 description: A new Flutter project.
 
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
   sdk: ">=2.15.1 <3.0.0"
-
 
 dependencies:
   flutter:
@@ -24,9 +23,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
 flutter:
-
   uses-material-design: true
   assets:
     - assets/images/app_icon/

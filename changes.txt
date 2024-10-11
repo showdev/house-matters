@@ -1,0 +1,1082 @@
+diff --git a/.vscode/launch.json b/.vscode/launch.json
+new file mode 100644
+index 0000000..51324f6
+--- /dev/null
++++ b/.vscode/launch.json
+@@ -0,0 +1,25 @@
++{
++    // Use IntelliSense to learn about possible attributes.
++    // Hover to view descriptions of existing attributes.
++    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
++    "version": "0.2.0",
++    "configurations": [
++        {
++            "name": "house-matters",
++            "request": "launch",
++            "type": "dart"
++        },
++        {
++            "name": "house-matters (profile mode)",
++            "request": "launch",
++            "type": "dart",
++            "flutterMode": "profile"
++        },
++        {
++            "name": "house-matters (release mode)",
++            "request": "launch",
++            "type": "dart",
++            "flutterMode": "release"
++        }
++    ]
++}
+\ No newline at end of file
+diff --git a/README.md b/README.md
+index 07210f7..ad8a3be 100644
+--- a/README.md
++++ b/README.md
+@@ -1,5 +1,7 @@
+-# Flutter IoT App by Ben
+-UI Inspired by dribble designs
++# House Matters
++A project for a Mobile and Hybrid IoT application course from Chernivtsi National University.
++
++Inspired by Flutter IoT app by Ben: https://flutterawesome.com/flutter-iot-app-by-ben/  
+ 
+ ## Features of the app
+ - Add devices
+@@ -11,9 +13,9 @@ UI Inspired by dribble designs
+ - Widget testing
+ 
+ ## Screenshots
+-|Home|Control Page|
+-|:-:|:-:|
+-|<img src="/assets/screenshots/home.png" width="250"/>|<img src="/assets/screenshots/panel.png" width="250"/>|
++|                         Home                          |                      Control Page                      |
++| :---------------------------------------------------: | :----------------------------------------------------: |
++| <img src="/assets/screenshots/home.png" width="250"/> | <img src="/assets/screenshots/panel.png" width="250"/> |
+ 
+ ## Steps to build the app
+ - Clone repo (build files are included)
+diff --git a/android/app/build.gradle b/android/app/build.gradle
+index 2380f17..a2574db 100644
+--- a/android/app/build.gradle
++++ b/android/app/build.gradle
+@@ -44,7 +44,7 @@ android {
+ 
+     defaultConfig {
+         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+-        applicationId "com.example.flutter_iot_ben"
++        applicationId "com.osygenlab.house_matters"
+         // You can update the following values to match your application needs.
+         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
+         minSdkVersion flutter.minSdkVersion
+diff --git a/android/app/src/debug/AndroidManifest.xml b/android/app/src/debug/AndroidManifest.xml
+index 6390abe..eb3eb50 100644
+--- a/android/app/src/debug/AndroidManifest.xml
++++ b/android/app/src/debug/AndroidManifest.xml
+@@ -1,8 +1,8 @@
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-    package="com.example.flutter_iot_ben">
++    package="com.osygenlab.house_matters">
+     <!-- The INTERNET permission is required for development. Specifically,
+          the Flutter tool needs it to communicate with the running application
+          to allow setting breakpoints, to provide hot reload, etc.
+     -->
+-    <uses-permission android:name="android.permission.INTERNET"/>
+-</manifest>
++    <uses-permission android:name="android.permission.INTERNET" />
++</manifest>
+\ No newline at end of file
+diff --git a/android/app/src/main/AndroidManifest.xml b/android/app/src/main/AndroidManifest.xml
+index 271f944..0bb22b5 100644
+--- a/android/app/src/main/AndroidManifest.xml
++++ b/android/app/src/main/AndroidManifest.xml
+@@ -1,7 +1,7 @@
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-    package="com.example.flutter_iot_ben">
+-   <application
+-        android:label="flutter_iot_ben"
++    package="com.osygenlab.house_matters">
++    <application
++        android:label="house_matters"
+         android:name="${applicationName}"
+         android:icon="@mipmap/ic_launcher">
+         <activity
+@@ -17,12 +17,12 @@
+                  while the Flutter UI initializes. After that, this theme continues
+                  to determine the Window background behind the Flutter UI. -->
+             <meta-data
+-              android:name="io.flutter.embedding.android.NormalTheme"
+-              android:resource="@style/NormalTheme"
+-              />
++                android:name="io.flutter.embedding.android.NormalTheme"
++                android:resource="@style/NormalTheme"
++            />
+             <intent-filter>
+-                <action android:name="android.intent.action.MAIN"/>
+-                <category android:name="android.intent.category.LAUNCHER"/>
++                <action android:name="android.intent.action.MAIN" />
++                <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+         </activity>
+         <!-- Don't delete the meta-data below.
+@@ -31,4 +31,4 @@
+             android:name="flutterEmbedding"
+             android:value="2" />
+     </application>
+-</manifest>
++</manifest>
+\ No newline at end of file
+diff --git a/android/app/src/main/kotlin/com/example/flutter_iot_ben/MainActivity.kt b/android/app/src/main/kotlin/com/example/flutter_iot_ben/MainActivity.kt
+deleted file mode 100644
+index 8f07ef0..0000000
+--- a/android/app/src/main/kotlin/com/example/flutter_iot_ben/MainActivity.kt
++++ /dev/null
+@@ -1,6 +0,0 @@
+-package com.example.flutter_iot_ben
+-
+-import io.flutter.embedding.android.FlutterActivity
+-
+-class MainActivity: FlutterActivity() {
+-}
+diff --git a/android/app/src/profile/AndroidManifest.xml b/android/app/src/profile/AndroidManifest.xml
+index 6390abe..eb3eb50 100644
+--- a/android/app/src/profile/AndroidManifest.xml
++++ b/android/app/src/profile/AndroidManifest.xml
+@@ -1,8 +1,8 @@
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-    package="com.example.flutter_iot_ben">
++    package="com.osygenlab.house_matters">
+     <!-- The INTERNET permission is required for development. Specifically,
+          the Flutter tool needs it to communicate with the running application
+          to allow setting breakpoints, to provide hot reload, etc.
+     -->
+-    <uses-permission android:name="android.permission.INTERNET"/>
+-</manifest>
++    <uses-permission android:name="android.permission.INTERNET" />
++</manifest>
+\ No newline at end of file
+diff --git a/android/build.gradle b/android/build.gradle
+index 83ae220..7f1c6c9 100644
+--- a/android/build.gradle
++++ b/android/build.gradle
+@@ -1,5 +1,5 @@
+ buildscript {
+-    ext.kotlin_version = '1.6.10'
++    ext.kotlin_version = '1.7.22'
+     repositories {
+         google()
+         mavenCentral()
+@@ -26,6 +26,6 @@ subprojects {
+     project.evaluationDependsOn(':app')
+ }
+ 
+-task clean(type: Delete) {
++tasks.register("clean", Delete) {
+     delete rootProject.buildDir
+ }
+diff --git a/ios/Runner.xcodeproj/project.pbxproj b/ios/Runner.xcodeproj/project.pbxproj
+index 3583633..1dc2b58 100644
+--- a/ios/Runner.xcodeproj/project.pbxproj
++++ b/ios/Runner.xcodeproj/project.pbxproj
+@@ -345,7 +345,7 @@
+ 					"$(inherited)",
+ 					"@executable_path/Frameworks",
+ 				);
+-				PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterIotBen;
++				PRODUCT_BUNDLE_IDENTIFIER = com.osygenlab.houseMatters;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
+ 				SWIFT_VERSION = 5.0;
+@@ -474,7 +474,7 @@
+ 					"$(inherited)",
+ 					"@executable_path/Frameworks",
+ 				);
+-				PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterIotBen;
++				PRODUCT_BUNDLE_IDENTIFIER = com.osygenlab.houseMatters;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
+ 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+@@ -497,7 +497,7 @@
+ 					"$(inherited)",
+ 					"@executable_path/Frameworks",
+ 				);
+-				PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterIotBen;
++				PRODUCT_BUNDLE_IDENTIFIER = com.osygenlab.houseMatters;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
+ 				SWIFT_VERSION = 5.0;
+diff --git a/ios/Runner/Info.plist b/ios/Runner/Info.plist
+index 622a070..adfe0df 100644
+--- a/ios/Runner/Info.plist
++++ b/ios/Runner/Info.plist
+@@ -1,49 +1,49 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+ <plist version="1.0">
+-<dict>
+-	<key>CFBundleDevelopmentRegion</key>
+-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+-	<key>CFBundleDisplayName</key>
+-	<string>Flutter Iot Ben</string>
+-	<key>CFBundleExecutable</key>
+-	<string>$(EXECUTABLE_NAME)</string>
+-	<key>CFBundleIdentifier</key>
+-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+-	<key>CFBundleInfoDictionaryVersion</key>
+-	<string>6.0</string>
+-	<key>CFBundleName</key>
+-	<string>flutter_iot_ben</string>
+-	<key>CFBundlePackageType</key>
+-	<string>APPL</string>
+-	<key>CFBundleShortVersionString</key>
+-	<string>$(FLUTTER_BUILD_NAME)</string>
+-	<key>CFBundleSignature</key>
+-	<string>????</string>
+-	<key>CFBundleVersion</key>
+-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+-	<key>LSRequiresIPhoneOS</key>
+-	<true/>
+-	<key>UILaunchStoryboardName</key>
+-	<string>LaunchScreen</string>
+-	<key>UIMainStoryboardFile</key>
+-	<string>Main</string>
+-	<key>UISupportedInterfaceOrientations</key>
+-	<array>
+-		<string>UIInterfaceOrientationPortrait</string>
+-		<string>UIInterfaceOrientationLandscapeLeft</string>
+-		<string>UIInterfaceOrientationLandscapeRight</string>
+-	</array>
+-	<key>UISupportedInterfaceOrientations~ipad</key>
+-	<array>
+-		<string>UIInterfaceOrientationPortrait</string>
+-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+-		<string>UIInterfaceOrientationLandscapeLeft</string>
+-		<string>UIInterfaceOrientationLandscapeRight</string>
+-	</array>
+-	<key>UIViewControllerBasedStatusBarAppearance</key>
+-	<false/>
+-	<key>CADisableMinimumFrameDurationOnPhone</key>
+-	<true/>
+-</dict>
+-</plist>
++	<dict>
++		<key>CFBundleDevelopmentRegion</key>
++		<string>$(DEVELOPMENT_LANGUAGE)</string>
++		<key>CFBundleDisplayName</key>
++		<string>House Matters IoT</string>
++		<key>CFBundleExecutable</key>
++		<string>$(EXECUTABLE_NAME)</string>
++		<key>CFBundleIdentifier</key>
++		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
++		<key>CFBundleInfoDictionaryVersion</key>
++		<string>6.0</string>
++		<key>CFBundleName</key>
++		<string>house_matters</string>
++		<key>CFBundlePackageType</key>
++		<string>APPL</string>
++		<key>CFBundleShortVersionString</key>
++		<string>$(FLUTTER_BUILD_NAME)</string>
++		<key>CFBundleSignature</key>
++		<string>????</string>
++		<key>CFBundleVersion</key>
++		<string>$(FLUTTER_BUILD_NUMBER)</string>
++		<key>LSRequiresIPhoneOS</key>
++		<true />
++		<key>UILaunchStoryboardName</key>
++		<string>LaunchScreen</string>
++		<key>UIMainStoryboardFile</key>
++		<string>Main</string>
++		<key>UISupportedInterfaceOrientations</key>
++		<array>
++			<string>UIInterfaceOrientationPortrait</string>
++			<string>UIInterfaceOrientationLandscapeLeft</string>
++			<string>UIInterfaceOrientationLandscapeRight</string>
++		</array>
++		<key>UISupportedInterfaceOrientations~ipad</key>
++		<array>
++			<string>UIInterfaceOrientationPortrait</string>
++			<string>UIInterfaceOrientationPortraitUpsideDown</string>
++			<string>UIInterfaceOrientationLandscapeLeft</string>
++			<string>UIInterfaceOrientationLandscapeRight</string>
++		</array>
++		<key>UIViewControllerBasedStatusBarAppearance</key>
++		<false />
++		<key>CADisableMinimumFrameDurationOnPhone</key>
++		<true />
++	</dict>
++</plist>
+\ No newline at end of file
+diff --git a/lib/main.dart b/lib/main.dart
+index e477f48..79c2e46 100644
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -1,5 +1,5 @@
+ import 'package:flutter/material.dart';
+-import 'package:flutter_iot_ben/pages/home/home_page.dart';
++import 'package:house_matters/pages/home/home_page.dart';
+ 
+ void main() {
+   runApp(const MyApp());
+@@ -17,7 +17,7 @@ class _MyAppState extends State<MyApp> {
+   Widget build(BuildContext context) {
+     return MaterialApp(
+       debugShowCheckedModeBanner: false,
+-      title: 'Flutter IOT Ben',
++      title: 'House Matters',
+       theme: ThemeData(
+           fontFamily: "Poppins",
+           sliderTheme: const SliderThemeData(
+diff --git a/lib/model/device_model.dart b/lib/model/device_model.dart
+index efdcd02..9ddc1c5 100644
+--- a/lib/model/device_model.dart
++++ b/lib/model/device_model.dart
+@@ -1,10 +1,14 @@
+ class DeviceModel {
+-  String name= "";
+-  String color= "";
++  String name = "";
++  String color = "";
+   bool isActive = false;
+   String icon = "";
+ 
+-  DeviceModel({required this.name,required this.color,required this.isActive,required this.icon});
++  DeviceModel(
++      {required this.name,
++      required this.color,
++      required this.isActive,
++      required this.icon});
+ 
+   DeviceModel.fromJson(Map<String, dynamic> json) {
+     name = json['name'];
+@@ -14,7 +18,7 @@ class DeviceModel {
+   }
+ 
+   Map<String, dynamic> toJson() {
+-    final Map<String, dynamic> data = new Map<String, dynamic>();
++    final Map<String, dynamic> data = <String, dynamic>{};
+     data['name'] = name;
+     data['color'] = color;
+     data['isActive'] = isActive;
+diff --git a/lib/pages/control_view/control_panel_page.dart b/lib/pages/control_view/control_panel_page.dart
+index 461c290..24cd2b4 100644
+--- a/lib/pages/control_view/control_panel_page.dart
++++ b/lib/pages/control_view/control_panel_page.dart
+@@ -1,23 +1,21 @@
+ import 'package:animated_background/animated_background.dart';
+ import 'package:flutter/material.dart';
+-import 'package:flutter_iot_ben/pages/control_view/widgets/option_widget.dart';
+-import 'package:flutter_iot_ben/pages/control_view/options_enum.dart';
+-import 'package:flutter_iot_ben/pages/control_view/widgets/power_widget.dart';
+-import 'package:flutter_iot_ben/pages/control_view/widgets/slider/slider_widget.dart';
+-import 'package:flutter_iot_ben/pages/control_view/widgets/speed_widget.dart';
+-import 'package:flutter_iot_ben/pages/control_view/widgets/temp_widget.dart';
+-import 'package:flutter_iot_ben/utils/slider_utils.dart';
+-import 'package:flutter_iot_ben/widgets/custom_appbar.dart';
++import 'package:house_matters/pages/control_view/widgets/option_widget.dart';
++import 'package:house_matters/pages/control_view/options_enum.dart';
++import 'package:house_matters/pages/control_view/widgets/power_widget.dart';
++import 'package:house_matters/pages/control_view/widgets/slider/slider_widget.dart';
++import 'package:house_matters/pages/control_view/widgets/speed_widget.dart';
++import 'package:house_matters/pages/control_view/widgets/temp_widget.dart';
++import 'package:house_matters/utils/slider_utils.dart';
++import 'package:house_matters/widgets/custom_appbar.dart';
+ import 'package:rainbow_color/rainbow_color.dart';
+ 
+ class ControlPanelPage extends StatefulWidget {
+   final String tag;
+   final Color color;
+ 
+-  const ControlPanelPage({
+-    Key? key,
+-    required this.tag,
+-    required this.color}) : super(key: key);
++  const ControlPanelPage({Key? key, required this.tag, required this.color})
++      : super(key: key);
+   @override
+   _ControlPanelPageState createState() => _ControlPanelPageState();
+ }
+@@ -43,67 +41,61 @@ class _ControlPanelPageState extends State<ControlPanelPage>
+     super.initState();
+   }
+ 
+-  @override
+-  void dispose() {
+-    super.dispose();
+-  }
+-
+   @override
+   Widget build(BuildContext context) {
+-    return  Scaffold(
+-          body: Container(
+-            width: MediaQuery.of(context).size.width,
+-            height: MediaQuery.of(context).size.height,
+-            decoration: BoxDecoration(
+-              gradient: LinearGradient(
+-                  begin: Alignment.topCenter,
+-                  end: Alignment.bottomCenter,
+-                  colors: <Color>[
+-                    Colors.white,
+-                    activeColor[progressVal].withOpacity(0.5),
+-                    activeColor[progressVal]
+-                  ]),
+-            ),
+-            child: AnimatedBackground(
+-              behaviour: RandomParticleBehaviour(
+-                  options: ParticleOptions(
+-                baseColor: const Color(0xFFFFFFFF),
+-                opacityChangeRate: 0.25,
+-                minOpacity: 0.1,
+-                maxOpacity: 0.3,
+-                spawnMinSpeed: speed * 60.0,
+-                spawnMaxSpeed: speed * 120,
+-                spawnMinRadius: 2.0,
+-                spawnMaxRadius: 5.0,
+-                particleCount: isActive ? speed * 150 : 0,
+-              )),
+-              vsync: this,
+-              child: SafeArea(
+-                child: Padding(
+-                  padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+-                  child: Column(
+-                    children: [
+-                     CustomAppBar(title: widget.tag),
+-                      const SizedBox(
+-                        height: 20,
+-                      ),
+-                      Expanded(
+-                        child: Column(
+-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+-                          children: [
+-                            options(),
+-                            slider(),
+-                            controls(),
+-                          ],
+-                        ),
+-                      )
+-                    ],
++    return Scaffold(
++      body: Container(
++        width: MediaQuery.of(context).size.width,
++        height: MediaQuery.of(context).size.height,
++        decoration: BoxDecoration(
++          gradient: LinearGradient(
++              begin: Alignment.topCenter,
++              end: Alignment.bottomCenter,
++              colors: <Color>[
++                Colors.white,
++                activeColor[progressVal].withOpacity(0.5),
++                activeColor[progressVal]
++              ]),
++        ),
++        child: AnimatedBackground(
++          behaviour: RandomParticleBehaviour(
++              options: ParticleOptions(
++            baseColor: const Color(0xFFFFFFFF),
++            opacityChangeRate: 0.25,
++            minOpacity: 0.1,
++            maxOpacity: 0.3,
++            spawnMinSpeed: speed * 60.0,
++            spawnMaxSpeed: speed * 120,
++            spawnMinRadius: 2.0,
++            spawnMaxRadius: 5.0,
++            particleCount: isActive ? speed * 150 : 0,
++          )),
++          vsync: this,
++          child: SafeArea(
++            child: Padding(
++              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
++              child: Column(
++                children: [
++                  CustomAppBar(title: widget.tag),
++                  const SizedBox(
++                    height: 20,
+                   ),
+-                ),
++                  Expanded(
++                    child: Column(
++                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
++                      children: [
++                        options(),
++                        slider(),
++                        controls(),
++                      ],
++                    ),
++                  )
++                ],
+               ),
+             ),
+           ),
+-        
++        ),
++      ),
+     );
+   }
+ 
+diff --git a/lib/pages/control_view/widgets/power_widget.dart b/lib/pages/control_view/widgets/power_widget.dart
+index 8f25467..12c984d 100644
+--- a/lib/pages/control_view/widgets/power_widget.dart
++++ b/lib/pages/control_view/widgets/power_widget.dart
+@@ -1,6 +1,6 @@
+ import 'package:flutter/cupertino.dart';
+ import 'package:flutter/material.dart';
+-import 'package:flutter_iot_ben/widgets/transparent_card.dart';
++import 'package:house_matters/widgets/transparent_card.dart';
+ 
+ class PowerWidget extends StatelessWidget {
+   final bool isActive;
+@@ -31,7 +31,7 @@ class PowerWidget extends StatelessWidget {
+                 text: TextSpan(
+                     text: 'OFF',
+                     style: TextStyle(
+-                      fontFamily: "Poppins",
++                        fontFamily: "Poppins",
+                         fontSize: 14,
+                         color: !isActive
+                             ? Colors.white
+diff --git a/lib/pages/control_view/widgets/slider/slider_widget.dart b/lib/pages/control_view/widgets/slider/slider_widget.dart
+index de3c43c..49e098b 100644
+--- a/lib/pages/control_view/widgets/slider/slider_widget.dart
++++ b/lib/pages/control_view/widgets/slider/slider_widget.dart
+@@ -1,6 +1,6 @@
+ import 'package:flutter/material.dart';
+-import 'package:flutter_iot_ben/pages/control_view/widgets/slider/custom_arc.dart';
+-import 'package:flutter_iot_ben/utils/slider_utils.dart';
++import 'package:house_matters/pages/control_view/widgets/slider/custom_arc.dart';
++import 'package:house_matters/utils/slider_utils.dart';
+ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+ 
+ class SliderWidget extends StatelessWidget {
+@@ -33,9 +33,7 @@ class SliderWidget extends StatelessWidget {
+           ),
+           Center(
+             child: CustomArc(
+-                color:color,
+-                diameter: kDiameter,
+-                sweepAngle: progressVal),
++                color: color, diameter: kDiameter, sweepAngle: progressVal),
+           ),
+           Center(
+             child: Container(
+@@ -94,10 +92,10 @@ class SliderWidget extends StatelessWidget {
+                               color: Colors.black,
+                               fontWeight: FontWeight.w500),
+                         ),
+-                        Padding(
+-                          padding: const EdgeInsets.only(top: 10),
++                        const Padding(
++                          padding: EdgeInsets.only(top: 10),
+                           child: Row(
+-                            children: const [
++                            children: [
+                               Text(
+                                 "o",
+                                 style: TextStyle(
+diff --git a/lib/pages/control_view/widgets/speed_widget.dart b/lib/pages/control_view/widgets/speed_widget.dart
+index 8d92dfd..862693d 100644
+--- a/lib/pages/control_view/widgets/speed_widget.dart
++++ b/lib/pages/control_view/widgets/speed_widget.dart
+@@ -1,5 +1,5 @@
+ import 'package:flutter/material.dart';
+-import 'package:flutter_iot_ben/widgets/transparent_card.dart';
++import 'package:house_matters/widgets/transparent_card.dart';
+ 
+ class SpeedWidget extends StatelessWidget {
+   final int speed;
+@@ -35,18 +35,18 @@ class SpeedWidget extends StatelessWidget {
+     );
+   }
+ 
+-  ElevatedButton _button(int _speed, bool isActive) {
++  ElevatedButton _button(int speed, bool isActive) {
+     return ElevatedButton(
+       style: ElevatedButton.styleFrom(
+-          onPrimary: isActive ? Colors.black : Colors.white,
+-          primary: isActive ? Colors.white : Colors.transparent,
++          foregroundColor: isActive ? Colors.black : Colors.white,
++          backgroundColor: isActive ? Colors.white : Colors.transparent,
+           minimumSize: const Size(38, 38),
+           padding: EdgeInsets.zero,
+           shape: const CircleBorder(),
+           side: BorderSide(color: Colors.white.withOpacity(0.4)),
+           elevation: 0),
+-      onPressed: () => changeSpeed(_speed),
+-      child: Text(_speed.toString()),
++      onPressed: () => changeSpeed(speed),
++      child: Text(speed.toString()),
+     );
+   }
+ }
+diff --git a/lib/pages/control_view/widgets/temp_widget.dart b/lib/pages/control_view/widgets/temp_widget.dart
+index 3c8bf51..17b536c 100644
+--- a/lib/pages/control_view/widgets/temp_widget.dart
++++ b/lib/pages/control_view/widgets/temp_widget.dart
+@@ -1,5 +1,5 @@
+ import 'package:flutter/material.dart';
+-import 'package:flutter_iot_ben/widgets/transparent_card.dart';
++import 'package:house_matters/widgets/transparent_card.dart';
+ 
+ class TempWidget extends StatelessWidget {
+   final double temp;
+diff --git a/lib/pages/home/home_page.dart b/lib/pages/home/home_page.dart
+index 8fa009a..f11e07d 100644
+--- a/lib/pages/home/home_page.dart
++++ b/lib/pages/home/home_page.dart
+@@ -1,7 +1,7 @@
+ import 'package:flutter/material.dart';
+-import 'package:flutter_iot_ben/pages/home/widgets/devices.dart';
+-import 'package:flutter_iot_ben/repository/devices.dart';
+-import 'package:flutter_iot_ben/utils/string_to_color.dart';
++import 'package:house_matters/pages/home/widgets/devices.dart';
++import 'package:house_matters/repository/devices.dart';
++import 'package:house_matters/utils/string_to_color.dart';
+ 
+ class HomePage extends StatefulWidget {
+   const HomePage({Key? key}) : super(key: key);
+@@ -28,12 +28,12 @@ class _HomePageState extends State<HomePage> {
+           child: SafeArea(
+             child: Column(
+               children: [
+-                Row(
++                const Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   crossAxisAlignment: CrossAxisAlignment.center,
+-                  children: const [
++                  children: [
+                     Text(
+-                      "Hi,Ben",
++                      "Hi, Oleksii",
+                       style: TextStyle(
+                           fontSize: 28,
+                           color: Colors.black,
+@@ -69,9 +69,9 @@ class _HomePageState extends State<HomePage> {
+                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             children: [
+-                              Column(
++                              const Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+-                                children: const [
++                                children: [
+                                   Text(
+                                     "4 devices added",
+                                     style: TextStyle(
+diff --git a/lib/pages/home/widgets/devices.dart b/lib/pages/home/widgets/devices.dart
+index f9bac80..4eaf6d5 100644
+--- a/lib/pages/home/widgets/devices.dart
++++ b/lib/pages/home/widgets/devices.dart
+@@ -1,7 +1,7 @@
+ import 'package:animations/animations.dart';
+ import 'package:flutter/cupertino.dart';
+ import 'package:flutter/material.dart';
+-import 'package:flutter_iot_ben/pages/control_view/control_panel_page.dart';
++import 'package:house_matters/pages/control_view/control_panel_page.dart';
+ import 'package:flutter_svg/svg.dart';
+ 
+ class Devices extends StatelessWidget {
+@@ -32,8 +32,7 @@ class Devices extends StatelessWidget {
+         closedShape: const RoundedRectangleBorder(
+             borderRadius: BorderRadius.all(Radius.circular(20.0))),
+         openBuilder: (BuildContext context, VoidCallback _) {
+-          return ControlPanelPage(
+-              tag: name, color: color);
++          return ControlPanelPage(tag: name, color: color);
+         },
+         tappable: true,
+         closedBuilder: (BuildContext _, VoidCallback openContainer) {
+diff --git a/lib/repository/devices.dart b/lib/repository/devices.dart
+index 3787b85..12c596f 100644
+--- a/lib/repository/devices.dart
++++ b/lib/repository/devices.dart
+@@ -1,4 +1,4 @@
+-import 'package:flutter_iot_ben/model/device_model.dart';
++import 'package:house_matters/model/device_model.dart';
+ 
+ List<DeviceModel> devices = [
+   DeviceModel(
+@@ -21,4 +21,4 @@ List<DeviceModel> devices = [
+       isActive: false,
+       color: "#c207db",
+       icon: 'assets/svg/speaker.svg'),
+-];
+\ No newline at end of file
++];
+diff --git a/pubspec.lock b/pubspec.lock
+index 57c2490..94f52d8 100644
+--- a/pubspec.lock
++++ b/pubspec.lock
+@@ -5,65 +5,66 @@ packages:
+     dependency: "direct main"
+     description:
+       name: animated_background
+-      url: "https://pub.dartlang.org"
++      sha256: "24b05a6dca2cb0231b011f9e8fd2e9d8060faac08a78cf0643915bb7d6e9b03b"
++      url: "https://pub.dev"
+     source: hosted
+     version: "2.0.0"
+   animations:
+     dependency: "direct main"
+     description:
+       name: animations
+-      url: "https://pub.dartlang.org"
++      sha256: "08abd4128b5c47c0496d3b610401edb7ac331c9af34323aaefe4cda549a3b552"
++      url: "https://pub.dev"
+     source: hosted
+     version: "2.0.4"
+   async:
+     dependency: transitive
+     description:
+       name: async
+-      url: "https://pub.dartlang.org"
++      sha256: "947bfcf187f74dbc5e146c9eb9c0f10c9f8b30743e341481c1e2ed3ecc18c20c"
++      url: "https://pub.dev"
+     source: hosted
+-    version: "2.8.2"
++    version: "2.11.0"
+   boolean_selector:
+     dependency: transitive
+     description:
+       name: boolean_selector
+-      url: "https://pub.dartlang.org"
++      sha256: "6cfb5af12253eaf2b368f07bacc5a80d1301a071c73360d746b7f2e32d762c66"
++      url: "https://pub.dev"
+     source: hosted
+-    version: "2.1.0"
++    version: "2.1.1"
+   characters:
+     dependency: transitive
+     description:
+       name: characters
+-      url: "https://pub.dartlang.org"
++      sha256: "04a925763edad70e8443c99234dc3328f442e811f1d8fd1a72f1c8ad0f69a605"
++      url: "https://pub.dev"
+     source: hosted
+-    version: "1.2.0"
+-  charcode:
+-    dependency: transitive
+-    description:
+-      name: charcode
+-      url: "https://pub.dartlang.org"
+-    source: hosted
+-    version: "1.3.1"
++    version: "1.3.0"
+   clock:
+     dependency: transitive
+     description:
+       name: clock
+-      url: "https://pub.dartlang.org"
++      sha256: cb6d7f03e1de671e34607e909a7213e31d7752be4fb66a86d29fe1eb14bfb5cf
++      url: "https://pub.dev"
+     source: hosted
+-    version: "1.1.0"
++    version: "1.1.1"
+   collection:
+     dependency: transitive
+     description:
+       name: collection
+-      url: "https://pub.dartlang.org"
++      sha256: ee67cb0715911d28db6bf4af1026078bd6f0128b07a5f66fb2ed94ec6783c09a
++      url: "https://pub.dev"
+     source: hosted
+-    version: "1.16.0"
++    version: "1.18.0"
+   fake_async:
+     dependency: transitive
+     description:
+       name: fake_async
+-      url: "https://pub.dartlang.org"
++      sha256: "511392330127add0b769b75a987850d136345d9227c6b94c96a04cf4a391bf78"
++      url: "https://pub.dev"
+     source: hosted
+-    version: "1.3.0"
++    version: "1.3.1"
+   flutter:
+     dependency: "direct main"
+     description: flutter
+@@ -73,14 +74,16 @@ packages:
+     dependency: "direct dev"
+     description:
+       name: flutter_lints
+-      url: "https://pub.dartlang.org"
++      sha256: aeb0b80a8b3709709c9cc496cdc027c5b3216796bc0af0ce1007eaf24464fd4c
++      url: "https://pub.dev"
+     source: hosted
+     version: "2.0.1"
+   flutter_svg:
+     dependency: "direct main"
+     description:
+       name: flutter_svg
+-      url: "https://pub.dartlang.org"
++      sha256: f2aa23d9d1721cd5c2c5097558368d2a1f85be35a85a6cf26a626e80c369a47c
++      url: "https://pub.dev"
+     source: hosted
+     version: "1.1.5"
+   flutter_test:
+@@ -88,74 +91,108 @@ packages:
+     description: flutter
+     source: sdk
+     version: "0.0.0"
++  leak_tracker:
++    dependency: transitive
++    description:
++      name: leak_tracker
++      sha256: "3f87a60e8c63aecc975dda1ceedbc8f24de75f09e4856ea27daf8958f2f0ce05"
++      url: "https://pub.dev"
++    source: hosted
++    version: "10.0.5"
++  leak_tracker_flutter_testing:
++    dependency: transitive
++    description:
++      name: leak_tracker_flutter_testing
++      sha256: "932549fb305594d82d7183ecd9fa93463e9914e1b67cacc34bc40906594a1806"
++      url: "https://pub.dev"
++    source: hosted
++    version: "3.0.5"
++  leak_tracker_testing:
++    dependency: transitive
++    description:
++      name: leak_tracker_testing
++      sha256: "6ba465d5d76e67ddf503e1161d1f4a6bc42306f9d66ca1e8f079a47290fb06d3"
++      url: "https://pub.dev"
++    source: hosted
++    version: "3.0.1"
+   lints:
+     dependency: transitive
+     description:
+       name: lints
+-      url: "https://pub.dartlang.org"
++      sha256: "5cfd6509652ff5e7fe149b6df4859e687fca9048437857cb2e65c8d780f396e3"
++      url: "https://pub.dev"
+     source: hosted
+     version: "2.0.0"
+   matcher:
+     dependency: transitive
+     description:
+       name: matcher
+-      url: "https://pub.dartlang.org"
++      sha256: d2323aa2060500f906aa31a895b4030b6da3ebdcc5619d14ce1aada65cd161cb
++      url: "https://pub.dev"
+     source: hosted
+-    version: "0.12.11"
++    version: "0.12.16+1"
+   material_color_utilities:
+     dependency: transitive
+     description:
+       name: material_color_utilities
+-      url: "https://pub.dartlang.org"
++      sha256: f7142bb1154231d7ea5f96bc7bde4bda2a0945d2806bb11670e30b850d56bdec
++      url: "https://pub.dev"
+     source: hosted
+-    version: "0.1.4"
++    version: "0.11.1"
+   meta:
+     dependency: transitive
+     description:
+       name: meta
+-      url: "https://pub.dartlang.org"
++      sha256: bdb68674043280c3428e9ec998512fb681678676b3c54e773629ffe74419f8c7
++      url: "https://pub.dev"
+     source: hosted
+-    version: "1.7.0"
++    version: "1.15.0"
+   path:
+     dependency: transitive
+     description:
+       name: path
+-      url: "https://pub.dartlang.org"
++      sha256: "087ce49c3f0dc39180befefc60fdb4acd8f8620e5682fe2476afd0b3688bb4af"
++      url: "https://pub.dev"
+     source: hosted
+-    version: "1.8.1"
++    version: "1.9.0"
+   path_drawing:
+     dependency: transitive
+     description:
+       name: path_drawing
+-      url: "https://pub.dartlang.org"
++      sha256: bbb1934c0cbb03091af082a6389ca2080345291ef07a5fa6d6e078ba8682f977
++      url: "https://pub.dev"
+     source: hosted
+     version: "1.0.1"
+   path_parsing:
+     dependency: transitive
+     description:
+       name: path_parsing
+-      url: "https://pub.dartlang.org"
++      sha256: e3e67b1629e6f7e8100b367d3db6ba6af4b1f0bb80f64db18ef1fbabd2fa9ccf
++      url: "https://pub.dev"
+     source: hosted
+     version: "1.0.1"
+   petitparser:
+     dependency: transitive
+     description:
+       name: petitparser
+-      url: "https://pub.dartlang.org"
++      sha256: "2ebb289dc4764ec397f5cd3ca9881c6d17196130a7d646ed022a0dd9c2e25a71"
++      url: "https://pub.dev"
+     source: hosted
+     version: "5.0.0"
+   rainbow_color:
+     dependency: "direct main"
+     description:
+       name: rainbow_color
+-      url: "https://pub.dartlang.org"
++      sha256: f207a81ecf6ab9f13f38c8966c8ef81ddadd5e62f0d1d457a4e6c86678f12563
++      url: "https://pub.dev"
+     source: hosted
+     version: "2.0.1"
+   rainbow_vis:
+     dependency: transitive
+     description:
+       name: rainbow_vis
+-      url: "https://pub.dartlang.org"
++      sha256: "4b4873fdfffc5f6d7519215c913478294d44792b9706d212b626e793a9fec171"
++      url: "https://pub.dev"
+     source: hosted
+     version: "2.0.0"
+   sky_engine:
+@@ -167,65 +204,82 @@ packages:
+     dependency: "direct main"
+     description:
+       name: sleek_circular_slider
+-      url: "https://pub.dartlang.org"
++      sha256: "8844d036269a13e60dda4e16534d30d27cacaff8d2f10d042d9d61d111468b13"
++      url: "https://pub.dev"
+     source: hosted
+     version: "2.0.1"
+   source_span:
+     dependency: transitive
+     description:
+       name: source_span
+-      url: "https://pub.dartlang.org"
++      sha256: "53e943d4206a5e30df338fd4c6e7a077e02254531b138a15aec3bd143c1a8b3c"
++      url: "https://pub.dev"
+     source: hosted
+-    version: "1.8.2"
++    version: "1.10.0"
+   stack_trace:
+     dependency: transitive
+     description:
+       name: stack_trace
+-      url: "https://pub.dartlang.org"
++      sha256: "73713990125a6d93122541237550ee3352a2d84baad52d375a4cad2eb9b7ce0b"
++      url: "https://pub.dev"
+     source: hosted
+-    version: "1.10.0"
++    version: "1.11.1"
+   stream_channel:
+     dependency: transitive
+     description:
+       name: stream_channel
+-      url: "https://pub.dartlang.org"
++      sha256: ba2aa5d8cc609d96bbb2899c28934f9e1af5cddbd60a827822ea467161eb54e7
++      url: "https://pub.dev"
+     source: hosted
+-    version: "2.1.0"
++    version: "2.1.2"
+   string_scanner:
+     dependency: transitive
+     description:
+       name: string_scanner
+-      url: "https://pub.dartlang.org"
++      sha256: "556692adab6cfa87322a115640c11f13cb77b3f076ddcc5d6ae3c20242bedcde"
++      url: "https://pub.dev"
+     source: hosted
+-    version: "1.1.0"
++    version: "1.2.0"
+   term_glyph:
+     dependency: transitive
+     description:
+       name: term_glyph
+-      url: "https://pub.dartlang.org"
++      sha256: a29248a84fbb7c79282b40b8c72a1209db169a2e0542bce341da992fe1bc7e84
++      url: "https://pub.dev"
+     source: hosted
+-    version: "1.2.0"
++    version: "1.2.1"
+   test_api:
+     dependency: transitive
+     description:
+       name: test_api
+-      url: "https://pub.dartlang.org"
++      sha256: "5b8a98dafc4d5c4c9c72d8b31ab2b23fc13422348d2997120294d3bac86b4ddb"
++      url: "https://pub.dev"
+     source: hosted
+-    version: "0.4.9"
++    version: "0.7.2"
+   vector_math:
+     dependency: transitive
+     description:
+       name: vector_math
+-      url: "https://pub.dartlang.org"
++      sha256: "80b3257d1492ce4d091729e3a67a60407d227c27241d6927be0130c98e741803"
++      url: "https://pub.dev"
+     source: hosted
+-    version: "2.1.2"
++    version: "2.1.4"
++  vm_service:
++    dependency: transitive
++    description:
++      name: vm_service
++      sha256: "5c5f338a667b4c644744b661f309fb8080bb94b18a7e91ef1dbd343bed00ed6d"
++      url: "https://pub.dev"
++    source: hosted
++    version: "14.2.5"
+   xml:
+     dependency: transitive
+     description:
+       name: xml
+-      url: "https://pub.dartlang.org"
++      sha256: ac0e3f4bf00ba2708c33fbabbbe766300e509f8c82dbd4ab6525039813f7e2fb
++      url: "https://pub.dev"
+     source: hosted
+     version: "6.1.0"
+ sdks:
+-  dart: ">=2.17.0 <3.0.0"
+-  flutter: ">=3.0.0"
++  dart: ">=3.3.0 <4.0.0"
++  flutter: ">=3.18.0-18.0.pre.54"
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 705c9a3..7c3d05e 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -1,14 +1,13 @@
+-name: flutter_iot_ben
++name: house_matters
+ description: A new Flutter project.
+ 
+-publish_to: 'none'
++publish_to: "none"
+ 
+ version: 1.0.0+1
+ 
+ environment:
+   sdk: ">=2.15.1 <3.0.0"
+ 
+-
+ dependencies:
+   flutter:
+     sdk: flutter
+@@ -24,9 +23,7 @@ dev_dependencies:
+   flutter_test:
+     sdk: flutter
+ 
+-
+ flutter:
+-
+   uses-material-design: true
+   assets:
+     - assets/images/app_icon/
+diff --git a/test/widget_test.dart b/test/widget_test.dart
+index 36a1aab..9f28037 100644
+--- a/test/widget_test.dart
++++ b/test/widget_test.dart
+@@ -8,7 +8,7 @@
+ import 'package:flutter/material.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ 
+-import 'package:flutter_iot_ben/main.dart';
++import 'package:house_matters/main.dart';
+ 
+ void main() {
+   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
