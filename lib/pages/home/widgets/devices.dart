@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:house_matters/pages/control_view/climate_control_panel.dart';
 import 'package:house_matters/pages/control_view/control_panel_page.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -32,7 +33,11 @@ class Devices extends StatelessWidget {
         closedShape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
         openBuilder: (BuildContext context, VoidCallback _) {
-          return ControlPanelPage(tag: name, color: color);
+          if (name == 'Climate Monitor') {
+            return ClimateControlePanePage(tag: name, color: color);
+          } else {
+            return ControlPanelPage(tag: name, color: color);
+          }
         },
         tappable: true,
         closedBuilder: (BuildContext _, VoidCallback openContainer) {

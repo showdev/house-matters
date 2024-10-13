@@ -6,26 +6,34 @@ class CustomArc extends StatelessWidget {
   final double? sweepAngle;
   final Color? color;
 
+  final double startAngle; // Added start angle
+  final double maxAngle; // Added max angle
+
   const CustomArc({
     Key? key,
     this.diameter = 200,
     @required this.sweepAngle,
     @required this.color,
+    this.startAngle = 180,
+    this.maxAngle = 180,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: MyPainter(sweepAngle, color),
+      painter: MyPainter(sweepAngle, color, startAngle, maxAngle),
       size: Size(diameter!, diameter!),
     );
   }
 }
 
 class MyPainter extends CustomPainter {
-  MyPainter(this.sweepAngle, this.color);
+  MyPainter(this.sweepAngle, this.color, this.startAngle, this.maxAngle);
   final double? sweepAngle;
   final Color? color;
+
+  final double startAngle;
+  final double maxAngle;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -34,7 +42,7 @@ class MyPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..color = color!;
 
-    double degToRad(num deg) => deg * (math.pi);
+    double degToRad(num deg) => deg * (math.pi / 180);
 
     final path = Path()
       ..arcTo(
@@ -43,8 +51,8 @@ class MyPainter extends CustomPainter {
             height: size.height,
             width: size.width,
           ),
-          degToRad(1),
-          degToRad(sweepAngle!),
+          degToRad(startAngle),
+          degToRad(sweepAngle! * maxAngle),
           false);
 
     canvas.drawPath(path, paint);

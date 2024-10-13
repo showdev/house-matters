@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "4 devices added",
+                                    "1 device added",
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: Colors.grey,
