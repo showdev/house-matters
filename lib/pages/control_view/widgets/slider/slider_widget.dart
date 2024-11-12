@@ -6,20 +6,15 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 class SliderWidget extends StatelessWidget {
   final double progressVal;
   final Color color;
-  final Function(double) onChange;
 
-  const SliderWidget(
-      {Key? key,
-      required this.progressVal,
-      required this.color,
-      required this.onChange})
-      : super(key: key);
+  const SliderWidget({
+    Key? key,
+    required this.progressVal,
+    required this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var test = angleRange(progressVal, kMinDegree, kMaxDegree);
-    print(angleRange(progressVal, kMinDegree, kMaxDegree));
-
     return SizedBox(
       width: kDiameter + 35,
       height: kDiameter + 35,
@@ -86,7 +81,6 @@ class SliderWidget extends StatelessWidget {
                     dotColor: color,
                   ),
                 ),
-                onChange: onChange,
               ),
             ),
           ),

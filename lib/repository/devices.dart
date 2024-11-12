@@ -1,4 +1,4 @@
-import 'package:house_matters/model/device_model.dart';
+import 'package:house_matters/models/device_model.dart';
 
 List<DeviceModel> devices = [
 //   DeviceModel(

@@ -143,12 +143,6 @@ class _ControlPanelPageState extends State<ControlPanelPage>
     return SliderWidget(
       progressVal: progressVal,
       color: activeColor[progressVal],
-      onChange: (value) {
-        setState(() {
-          temp = value;
-          progressVal = normalize(value, kMinDegree, kMaxDegree);
-        });
-      },
     );
   }
 

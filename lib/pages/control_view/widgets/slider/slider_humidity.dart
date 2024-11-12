@@ -6,17 +6,15 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 class SliderHumidity extends StatelessWidget {
   final double progressVal;
   final Color color;
-  final Function(double) onChange;
   final double minValue = 0;
   final double maxValue = 100;
   final double humidityAngleRange = 360;
 
-  const SliderHumidity(
-      {Key? key,
-      required this.progressVal,
-      required this.color,
-      required this.onChange})
-      : super(key: key);
+  const SliderHumidity({
+    Key? key,
+    required this.progressVal,
+    required this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +84,6 @@ class SliderHumidity extends StatelessWidget {
                     dotColor: color,
                   ),
                 ),
-                onChange: onChange,
               ),
             ),
           ),

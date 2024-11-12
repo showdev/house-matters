@@ -11,6 +11,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
 import 'dart:async';
+import 'package:house_matters/models/climate_data.dart';
+import 'package:house_matters/providers/database_helper.dart';
 
 class ClimateControlePanePage extends StatefulWidget {
   final String tag;
@@ -26,15 +28,15 @@ class ClimateControlePanePage extends StatefulWidget {
 
 class _ClimateControlePanePageState extends State<ClimateControlePanePage>
     with TickerProviderStateMixin {
-  late List<ClimateSensorData> dynamicChartData;
+  late List<ClimateData> dynamicChartData;
+  List<ClimateData> climateDataList = [];
+  List<ClimateData> staticChartData = [];
   late ChartSeriesController _tempSeriesController;
   late ChartSeriesController _humiditySeriesController;
 
-  List<ClimateSensorData> staticChartData = generateClimateData();
-
   Options option = Options.cooling;
   bool isActive = true;
-  bool showDynamic = false;
+  bool showDynamic = true;
   int speed = 1;
   double temp = 22.85;
   double humidityValue = 0.45;
@@ -60,28 +62,44 @@ class _ClimateControlePanePageState extends State<ClimateControlePanePage>
   @override
   void initState() {
     super.initState();
-    dynamicChartData = <ClimateSensorData>[
-      ClimateSensorData(
-          DateTime.now().millisecondsSinceEpoch, temp, humidityValue),
-    ];
+    dynamicChartData = <ClimateData>[];
+    // generateClimateData();
+    _loadClimateData();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        ClimateData generatedEntry = generateClimateDataEntry();
+        temp = generatedEntry.temperature;
+        humidityValue = generatedEntry.humidity;
 
-    // _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
-    //   if (!showDynamic) return;
-    //   setState(() {
-    //     dynamicChartData.add(ClimateSensorData(
-    //         DateTime.now().millisecondsSinceEpoch, temp, humidityValue));
-    //     _tempSeriesController.updateDataSource(
-    //       addedDataIndexes: <int>[dynamicChartData.length - 1],
-    //     );
-    //     // Remove older data points to keep only the last 10 minutes
-    //     if (dynamicChartData.length > 10) {
-    //       dynamicChartData.removeAt(0);
-    //       _tempSeriesController.updateDataSource(
-    //         removedDataIndexes: <int>[0],
-    //       );
-    //     }
-    //   });
-    // });
+        dynamicChartData.add(generatedEntry);
+        _tempSeriesController.updateDataSource(
+          addedDataIndexes: <int>[dynamicChartData.length - 1],
+        );
+        // Remove older data points to keep only the last 10 minutes
+        _humiditySeriesController.updateDataSource(
+          addedDataIndexes: <int>[dynamicChartData.length - 1],
+        );
+        // Remove older data points to keep only the last 10 minutes
+        if (dynamicChartData.length > 10) {
+          dynamicChartData.removeAt(0);
+          _humiditySeriesController.updateDataSource(
+            removedDataIndexes: <int>[0],
+          );
+
+          _tempSeriesController.updateDataSource(
+            removedDataIndexes: <int>[0],
+          );
+        }
+      });
+    });
+  }
+
+  Future<void> _loadClimateData() async {
+    final dbHelper = DatabaseHelper.instance;
+    final allRows = await dbHelper.queryAllRows();
+    setState(() {
+      climateDataList = allRows.map((row) => ClimateData.fromMap(row)).toList();
+    });
   }
 
   @override
@@ -148,22 +166,10 @@ class _ClimateControlePanePageState extends State<ClimateControlePanePage>
   }
 
   Widget temperature() {
+    progressVal = normalize(temp, kMinDegree, kMaxDegree);
     return SliderWidget(
       progressVal: progressVal,
       color: activeColor[progressVal],
-      onChange: (value) {
-        setState(() {
-          temp = value;
-          progressVal = normalize(value, kMinDegree, kMaxDegree);
-
-          if (!showDynamic) return;
-          dynamicChartData.add(ClimateSensorData(
-              DateTime.now().millisecondsSinceEpoch, value, humidityValue));
-          _tempSeriesController.updateDataSource(
-            addedDataIndexes: <int>[dynamicChartData.length - 1],
-          );
-        });
-      },
     );
   }
 
@@ -171,17 +177,6 @@ class _ClimateControlePanePageState extends State<ClimateControlePanePage>
     return SliderHumidity(
       progressVal: humidityValue,
       color: humidityColor[humidityValue],
-      onChange: (value) {
-        setState(() {
-          humidityValue = value / 100;
-          if (!showDynamic) return;
-          dynamicChartData.add(ClimateSensorData(
-              DateTime.now().millisecondsSinceEpoch, temp, value));
-          _humiditySeriesController.updateDataSource(
-            addedDataIndexes: <int>[dynamicChartData.length - 1],
-          );
-        });
-      },
     );
   }
 
@@ -191,38 +186,42 @@ class _ClimateControlePanePageState extends State<ClimateControlePanePage>
       child: SfCartesianChart(
           title: ChartTitle(text: 'Recent measurements'),
           primaryXAxis: CategoryAxis(
-            // maximumLabels: 5,
-            visibleMinimum: 0, // Index of the first data point to show
-            visibleMaximum: 5,
+            visibleMinimum: 0,
+            visibleMaximum: 9, // Show 10 data points (index 0 to 9)
           ),
           legend: Legend(
             isVisible: true,
             position: LegendPosition.bottom,
           ),
-          series: <LineSeries<ClimateSensorData, String>>[
-            LineSeries<ClimateSensorData, String>(
+          zoomPanBehavior: ZoomPanBehavior(
+            enablePanning: true, // Enable horizontal panning
+            zoomMode: ZoomMode.x, // Allow zooming only on the x-axis
+          ),
+          series: <LineSeries<ClimateData, String>>[
+            LineSeries<ClimateData, String>(
                 // Bind data source
                 dataLabelSettings: const DataLabelSettings(
                   isVisible: true,
                 ),
                 legendItemText: 'humidity, %',
-                dataSource: staticChartData,
-                xValueMapper: (ClimateSensorData data, _) =>
+                dataSource: climateDataList,
+                xValueMapper: (ClimateData data, _) =>
                     timestampToHHmm(data.timestamp),
                 // DateTime.fromMillisecondsSinceEpoch(data.timestamp),
-                yValueMapper: (ClimateSensorData data, _) =>
+                yValueMapper: (ClimateData data, _) =>
                     (data.humidity * 100).toInt()),
-            LineSeries<ClimateSensorData, String>(
+            LineSeries<ClimateData, String>(
                 // Bind data source
                 dataLabelSettings: const DataLabelSettings(
                   isVisible: true,
                 ),
                 legendItemText: 'temperature, °C',
-                dataSource: staticChartData,
-                xValueMapper: (ClimateSensorData data, _) =>
+                dataSource: climateDataList,
+                xValueMapper: (ClimateData data, _) =>
                     timestampToHHmm(data.timestamp),
                 // DateTime.fromMillisecondsSinceEpoch(data.timestamp),
-                yValueMapper: (ClimateSensorData data, _) => data.temp.toInt()),
+                yValueMapper: (ClimateData data, _) =>
+                    data.temperature.toInt()),
           ]),
     );
   }
@@ -257,24 +256,24 @@ class _ClimateControlePanePageState extends State<ClimateControlePanePage>
     return Container(
         color: Colors.grey[200]?.withOpacity(0.8),
         child: SfCartesianChart(
-          series: <LineSeries<ClimateSensorData, DateTime>>[
-            LineSeries<ClimateSensorData, DateTime>(
+          series: <LineSeries<ClimateData, DateTime>>[
+            LineSeries<ClimateData, DateTime>(
               onRendererCreated: (ChartSeriesController controller) {
                 _humiditySeriesController = controller;
               },
               dataSource: dynamicChartData,
-              xValueMapper: (ClimateSensorData data, _) =>
+              xValueMapper: (ClimateData data, _) =>
                   DateTime.fromMillisecondsSinceEpoch(data.timestamp),
-              yValueMapper: (ClimateSensorData data, _) => data.humidity,
+              yValueMapper: (ClimateData data, _) => data.humidity * 100,
             ),
-            LineSeries<ClimateSensorData, DateTime>(
+            LineSeries<ClimateData, DateTime>(
               onRendererCreated: (ChartSeriesController controller) {
                 _tempSeriesController = controller;
               },
               dataSource: dynamicChartData,
-              xValueMapper: (ClimateSensorData data, _) =>
+              xValueMapper: (ClimateData data, _) =>
                   DateTime.fromMillisecondsSinceEpoch(data.timestamp),
-              yValueMapper: (ClimateSensorData data, _) => data.temp,
+              yValueMapper: (ClimateData data, _) => data.temperature,
             ),
           ],
           primaryXAxis: DateTimeAxis(
@@ -285,45 +284,52 @@ class _ClimateControlePanePageState extends State<ClimateControlePanePage>
           ),
         ));
   }
-}
 
-class ClimateSensorData {
-  ClimateSensorData(
-    this.timestamp,
-    this.temp,
-    this.humidity,
-  );
-  final double temp;
-  final double humidity;
-  final int timestamp;
-}
+  ClimateData generateClimateDataEntry() {
+    DateTime now = DateTime.now();
+    Random random = Random();
 
-List<ClimateSensorData> generateClimateData() {
-  List<ClimateSensorData> data = [];
-  DateTime now = DateTime.now();
-  Random random = Random();
+    double genTemp = temp;
+    double genHumidity = humidityValue;
 
-  double temp = 20;
-  double humidity = 0.4;
+    int time = now.millisecondsSinceEpoch;
 
-  for (int i = 0; i <= 10; i++) {
-    DateTime time = now.add(Duration(minutes: i));
-    int timestamp = time.millisecondsSinceEpoch;
+    double humidityChange;
+    double tempChange;
+    // Temperature adjustment logic
+    if (genTemp < 19) {
+      // If temperature is below 19, tend to increase it
+      tempChange = random.nextDouble() * 4 - 1; // Range: -1 to +3
+    } else if (genTemp > 24) {
+      // If temperature is above 24, tend to decrease it
+      tempChange = random.nextDouble() * 4 - 3; // Range: -3 to +1
+    } else {
+      // If temperature is within the desired range, smaller adjustments
+      tempChange = random.nextDouble() * 2 - 1; // Range: -1 to +1
+    }
 
-    temp += random.nextDouble() * 10 - 5; // Can vary by +/- 5 degrees
+    if (genHumidity < 0.35) {
+      humidityChange =
+          random.nextDouble() * 0.02 - 0.005; // Range: -0.005 to +0.015
+    } else if (genHumidity > 0.45) {
+      // If humidity is above 0.45, tend to decrease it
+      humidityChange =
+          random.nextDouble() * 0.02 - 0.015; // Range: -0.015 to +0.005
+    } else {
+      // If humidity is within the desired range, smaller adjustments
+      humidityChange =
+          random.nextDouble() * 0.01 - 0.005; // Range: -0.005 to +0.005
+    }
 
-    // Vary humidity with a trend and some noise
-    humidity += (random.nextDouble() - 0.3) *
-        0.1; // General upward trend with variation
+    genTemp += tempChange;
+    genHumidity += humidityChange;
 
-    // Keep values within reasonable ranges
-    temp = temp.clamp(16, 30);
-    humidity = humidity.clamp(0.2, 0.6);
+    genTemp = genTemp.clamp(15, 30);
+    genHumidity = genHumidity.clamp(0.2, 0.6);
 
-    data.add(ClimateSensorData(timestamp, temp, humidity));
+    return ClimateData(
+        temperature: genTemp, humidity: genHumidity, timestamp: time);
   }
-
-  return data;
 }
 
 String timestampToHHmm(int timestamp) {
