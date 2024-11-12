@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:house_matters/pages/control_view/options_enum.dart';
 import 'package:house_matters/pages/control_view/widgets/slider/slider_humidity.dart';
 import 'package:house_matters/pages/control_view/widgets/slider/slider_widget.dart';
+import 'package:house_matters/providers/sensor_data_provider.dart';
 import 'package:house_matters/utils/slider_utils.dart';
 import 'package:house_matters/widgets/custom_appbar.dart';
+import 'package:provider/provider.dart';
 import 'package:rainbow_color/rainbow_color.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
@@ -38,8 +40,8 @@ class _ClimateControlePanePageState extends State<ClimateControlePanePage>
   bool isActive = true;
   bool showDynamic = true;
   int speed = 1;
-  double temp = 22.85;
-  double humidityValue = 0.45;
+  late double temp = 22.85;
+  late double humidityValue = 0.45;
   double progressVal = 0.49;
   Timer? _timer;
 
@@ -62,30 +64,30 @@ class _ClimateControlePanePageState extends State<ClimateControlePanePage>
   @override
   void initState() {
     super.initState();
-    dynamicChartData = <ClimateData>[];
-    // generateClimateData();
     _loadClimateData();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        ClimateData generatedEntry = generateClimateDataEntry();
-        temp = generatedEntry.temperature;
-        humidityValue = generatedEntry.humidity;
+    dynamicChartData = [];
+    // Replace timer with WebSocket connection
+    final sensorDataProvider =
+        Provider.of<SensorDataProvider>(context, listen: false);
 
-        dynamicChartData.add(generatedEntry);
+    sensorDataProvider.climateDataStream.listen((data) {
+      setState(() {
+        temp = data.temperature;
+        humidityValue = data.humidity;
+
+        dynamicChartData.add(data);
         _tempSeriesController.updateDataSource(
           addedDataIndexes: <int>[dynamicChartData.length - 1],
         );
-        // Remove older data points to keep only the last 10 minutes
         _humiditySeriesController.updateDataSource(
           addedDataIndexes: <int>[dynamicChartData.length - 1],
         );
-        // Remove older data points to keep only the last 10 minutes
+
         if (dynamicChartData.length > 10) {
           dynamicChartData.removeAt(0);
           _humiditySeriesController.updateDataSource(
             removedDataIndexes: <int>[0],
           );
-
           _tempSeriesController.updateDataSource(
             removedDataIndexes: <int>[0],
           );
@@ -283,52 +285,6 @@ class _ClimateControlePanePageState extends State<ClimateControlePanePage>
             majorGridLines: const MajorGridLines(width: 0),
           ),
         ));
-  }
-
-  ClimateData generateClimateDataEntry() {
-    DateTime now = DateTime.now();
-    Random random = Random();
-
-    double genTemp = temp;
-    double genHumidity = humidityValue;
-
-    int time = now.millisecondsSinceEpoch;
-
-    double humidityChange;
-    double tempChange;
-    // Temperature adjustment logic
-    if (genTemp < 19) {
-      // If temperature is below 19, tend to increase it
-      tempChange = random.nextDouble() * 4 - 1; // Range: -1 to +3
-    } else if (genTemp > 24) {
-      // If temperature is above 24, tend to decrease it
-      tempChange = random.nextDouble() * 4 - 3; // Range: -3 to +1
-    } else {
-      // If temperature is within the desired range, smaller adjustments
-      tempChange = random.nextDouble() * 2 - 1; // Range: -1 to +1
-    }
-
-    if (genHumidity < 0.35) {
-      humidityChange =
-          random.nextDouble() * 0.02 - 0.005; // Range: -0.005 to +0.015
-    } else if (genHumidity > 0.45) {
-      // If humidity is above 0.45, tend to decrease it
-      humidityChange =
-          random.nextDouble() * 0.02 - 0.015; // Range: -0.015 to +0.005
-    } else {
-      // If humidity is within the desired range, smaller adjustments
-      humidityChange =
-          random.nextDouble() * 0.01 - 0.005; // Range: -0.005 to +0.005
-    }
-
-    genTemp += tempChange;
-    genHumidity += humidityChange;
-
-    genTemp = genTemp.clamp(15, 30);
-    genHumidity = genHumidity.clamp(0.2, 0.6);
-
-    return ClimateData(
-        temperature: genTemp, humidity: genHumidity, timestamp: time);
   }
 }
 
